@@ -275,6 +275,11 @@ Refer to `lib/core/*`.
 ; => (straight-flush)
 ```
 
+## Installation
+
+1. Install [quicklisp](http://www.quicklisp.org/beta/).
+2. Get Cleson repository, and place in `quicklisp/local-projects/` directory.
+3. `(ql:quicklisp :cleson)`
 
 ## Author
 
