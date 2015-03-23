@@ -101,4 +101,11 @@
     '(1 1 2 1 1 2 1 1)
     :test 'equalp)
 
+(is (funcall (match-lambda ((= 'yo) 'yeah)) 'yo)
+    'yeah)
+
+(is (funcall (match-all-lambda (= 'yo) 'yeah) 'yo)
+    '(yeah)
+    :test #'equal)
+
 (finalize)
