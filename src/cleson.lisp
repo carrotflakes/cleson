@@ -205,7 +205,7 @@
                                :pairs (append new-pairs (cdr pairs))))
                  (apply-pattern pattern-constructor pattern-args target)))))))
 
-(defun state-endp (state)
+(defun state-end-p (state)
   (null (slot-value state 'pairs)))
 
 (defun match-one (target pattern func)
@@ -213,7 +213,7 @@
      with states = (list (make-state :pairs `((,target . ,pattern))))
      for state = (pop states)
      while state
-     when (state-endp state)
+     when (state-end-p state)
      return (values (eval-in func (state-bindings state)) t)
      do (setf states (nconc (next-states state) states))))
 
@@ -230,7 +230,7 @@
      with states = (list (make-state :pairs `((,target . ,pattern))))
      for state = (pop states)
      while state
-     when (state-endp state)
+     when (state-end-p state)
      collect (eval-in func (state-bindings state))
      do (setf states (nconc (next-states state) states))))
 
