@@ -130,8 +130,14 @@
        ((string= (first pattern) "EQUALP")
         `(equalp ,(lambda-compile (second pattern))))
        ((string= (first pattern) "LET")
-        `(let ,(second pattern) ,(pattern-compile (third pattern))))
-       ((member (first pattern) '(^ * +) :test #'string=)
+        `(let
+           ,(loop
+               for (id form) in (second pattern)
+               collect (cons id (lambda-compile form)))
+           ,(pattern-compile (third pattern))))
+       ((string= (first pattern) "^")
+        `(^ ,(pattern-compile (second pattern))))
+       ((member (first pattern) '(* +) :test #'string=)
         `(,(first pattern) ,@(mapcar #'pattern-compile (cdr pattern))))
        (t (handler-case (pattern-function-compile (first pattern) (cdr pattern))
             (undefined-pattern-function ()
@@ -176,7 +182,7 @@
                                :pairs (cdr pairs)))
              '()))
         ((^)
-         (if (match-one target (first pattern-args) t)
+         (if (match-one target (first pattern-args) (lambda () t))
              '()
              (list (make-state :bindings bindings
                                :pairs (cdr pairs)))))

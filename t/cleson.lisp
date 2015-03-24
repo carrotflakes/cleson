@@ -111,17 +111,20 @@
     '(1 3)
     :test 'equal)
 
-'(is (match-all '(0 1 2 3 4)
+(is (match-all '(0 1 2 3 4)
                (:multiset-cons (* (^ (= 1)) $x) _) x)
     '(0 2 3 4)
-    :test 'exuql)
+    :test 'equal)
 
-'(is (match-all '(0 1 2 3 4)
+(is (match-all '(0 1 2 3 4)
                (:multiset-cons (* (^ (^ (= 1))) $x) _) x)
     '(1)
-    :test 'exuql)
+    :test 'equal)
 
-;todo let
+(is (match '(0 1)
+      ((:cons $x (let ((y (+ x 1))) (:cons =y _))) (list x y)))
+    '(0 1)
+    :test 'equal)
 
 (is (match-all '(1 2 3 4 1 2 1)
       (:multiset-cons
