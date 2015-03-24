@@ -91,6 +91,38 @@
     '((NIL (1 2)) ((1) (1 2)) ((2) (1 2)) ((1 2) (1 2)) ((2 1) (1 2)))
     :test 'equal)
 
+(is (match-all '(0 1 2 3 4)
+               (:multiset-cons (* (? #'evenp) $x) _) x)
+    '(0 2 4)
+    :test 'equal)
+
+(is (match-all '(0 1 2 3 4)
+               (:multiset-cons (* (? 'evenp) $x) _) x)
+    '(0 2 4)
+    :test 'equal)
+
+(is (match-all '(0 1 2 3 4)
+               (:multiset-cons (* (? (lambda (x) (evenp x))) $x) _) x)
+    '(0 2 4)
+    :test 'equal)
+
+(is (match-all '(0 1 2 3 4)
+               (:multiset-cons (* (+ (= 1) (= 3)) $x) _) x)
+    '(1 3)
+    :test 'equal)
+
+'(is (match-all '(0 1 2 3 4)
+               (:multiset-cons (* (^ (= 1)) $x) _) x)
+    '(0 2 3 4)
+    :test 'exuql)
+
+'(is (match-all '(0 1 2 3 4)
+               (:multiset-cons (* (^ (^ (= 1))) $x) _) x)
+    '(1)
+    :test 'exuql)
+
+;todo let
+
 (is (match-all '(1 2 3 4 1 2 1)
       (:multiset-cons
        $x
