@@ -113,7 +113,7 @@
        ((string= pattern "$" :start1 0 :end1 1)
         `(pattern-variables ,(remove-prefix pattern)))
        ((string= pattern "=" :start1 0 :end1 1)
-        `(equalp-variable ,(remove-prefix pattern)))
+        `(equal-variable ,(remove-prefix pattern)))
        (t pattern)))
     (list
      (cond
@@ -160,8 +160,8 @@
                                             target
                                             bindings)
                            :pairs (cdr pairs))))
-        ((equalp-variable)
-         (if (equalp target (cdr (or (assoc (first pattern-args) bindings)
+        ((equal-variable)
+         (if (equal target (cdr (or (assoc (first pattern-args) bindings)
                                      `(nil . ,(symbol-value (first pattern-args))))))
              (list (make-state :bindings bindings
                                :pairs (cdr pairs)))
@@ -172,7 +172,7 @@
                                :pairs (cdr pairs)))
              '()))
         ((=)
-         (if (equalp target (eval-in (first pattern-args) bindings))
+         (if (equal target (eval-in (first pattern-args) bindings))
              (list (make-state :bindings bindings
                                :pairs (cdr pairs)))
              '()))
