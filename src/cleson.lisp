@@ -52,6 +52,11 @@
 (defvar *patterns-map* (make-hash-table :test 'eq))
 
 
+;;; special variables
+(defparameter *variable-pattern-bindings* '()
+  "Alist of symbol and compiled pattern. This is used during pattern-compiles")
+
+
 ;;; generics
 (defgeneric pattern-function-compile (symbol args)
   (:method (symbol args)
@@ -63,14 +68,14 @@
   `(setf (gethash ,name *patterns-map*)
          (lambda (,target ,@lambda-list) ,@body)))
 
-(defmacro define-pattern-function (name args pattern-form)
+(defmacro define-pattern-function (name args pattern)
   `(defmethod pattern-function-compile ((symbol (eql ',name)) (prms list))
-     (let ((pattern ',pattern-form))
-       (loop
-          for arg in ',args
-          for prm in prms
-          do (setf pattern (subst prm arg pattern)))
-       (pattern-compile pattern))))
+     (let ((*variable-pattern-bindings*
+            (nconc (mapcar #'cons
+                           ',args
+                           (mapcar #'pattern-compile prms))
+                   *variable-pattern-bindings*)))
+       (pattern-compile ,pattern))))
 
 
 ;;; auxiliary functions
@@ -103,6 +108,9 @@
              (error 'undefined-pattern :constructor constructor))
          target args))
 
+(defun find-binding-pattern-variable (variable)
+  (cdr (assoc variable *variable-pattern-bindings*)))
+
 
 ;;; cardinal functions
 (defun pattern-compile (pattern)
@@ -114,7 +122,7 @@
         `(pattern-variables ,(remove-prefix pattern)))
        ((string= pattern "=" :start1 0 :end1 1)
         `(equal-variable ,(remove-prefix pattern)))
-       (t pattern)))
+       (t (find-binding-pattern-variable pattern))))
     (list
      (cond
        ((string= (first pattern) "?")
