@@ -127,6 +127,8 @@
      (cond
        ((string= (first pattern) "?")
         `(? ,(eval (second pattern))))
+       ((string= (first pattern) "QUOTE")
+        `(literal ,(second pattern)))
        ((string= (first pattern) "=")
         `(equalp ,(lambda-compile (second pattern))))
        ((string= (first pattern) "EQ")
@@ -171,6 +173,11 @@
         ((equal-variable)
          (if (equal target (cdr (or (assoc (first pattern-args) bindings)
                                      `(nil . ,(symbol-value (first pattern-args))))))
+             (list (make-state :bindings bindings
+                               :pairs (cdr pairs)))
+             '()))
+        ((literal)
+         (if (equal target (first pattern-args))
              (list (make-state :bindings bindings
                                :pairs (cdr pairs)))
              '()))
