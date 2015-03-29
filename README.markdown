@@ -123,6 +123,12 @@ these represent each equivalency test function.
 
 Equivalent to `(= identifier)`.
 
+### Literal patterns
+
+    'value
+
+If target value is considered as same as the *value* by `equal` function, the match succeeds.
+
 ### Predicate patterns
 
     (? function)
