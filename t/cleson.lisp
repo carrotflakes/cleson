@@ -43,6 +43,12 @@
 (is (equals '(1) '(1))
     'equal)
 
+(is (match-all '(1 2 3 yo "yo")
+               (:multiset-cons (* (+ '2 'yo '"yo") $x) _)
+               x)
+    '(2 yo "yo")
+    :test 'equal)
+
 (is (match-all '(1 2)
                (:cons $x $xs)
                (list x xs))
