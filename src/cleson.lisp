@@ -75,7 +75,7 @@
                            ',args
                            (mapcar #'pattern-compile prms))
                    *variable-pattern-bindings*)))
-       (pattern-compile ,pattern))))
+       (pattern-compile ',pattern))))
 
 
 ;;; auxiliary functions
