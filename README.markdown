@@ -91,13 +91,13 @@ For example, define `twin` pattern-function and use that.
 
     _
 
-Match any target.
+The pattern matches any target.
 
 ### Pattern variables
 
     $identifier
 
-Match anything and the target value binds the *identifier* variable.
+Pattern variables matches anything and the target value binds the *identifier* variable.
 The variable can be used in right side of the pattern.
 
 ### Inductive patterns
@@ -112,7 +112,7 @@ You can define new inductive patterns by `define-pattern` macro.
 
     (= form)
 
-Match to a value which result of evaluate the *form*.
+Value patterns match to a value which result of evaluate the *form*.
 The equivalency test uses `equal` function.
 You can use `eq`, `eql`, `equal` or `equalp` instead of `=`, 
 these represent each equivalency test function.
@@ -152,7 +152,7 @@ Try to match the each *pattern*. If all of these match succeeds, consider the ma
 
     (+ pattern ...)
 
-Try to match the first *pattern*. If it does not succeed, try the second one, etc.
+Try to match the first *pattern*. If that does not succeed, try the second one, etc.
 
 ### Let patterns
 
