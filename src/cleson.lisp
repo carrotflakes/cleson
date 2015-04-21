@@ -17,12 +17,6 @@
 (in-package :cleson)
 
 
-;;; utility macros
-(defmacro eval-once (form)
-  (let ((symbol (gensym)))
-    `(progn (defvar ,symbol ,form) (symbol-value ',symbol))))
-
-
 ;;; conditions
 (define-condition undefined-pattern (error)
   ((constructor :initarg :constructor))
@@ -260,7 +254,7 @@
 (defmacro match (target &rest pattern-forms)
   `(%match
     ,target
-    (eval-once
+    (load-time-value
      (list
       ,@(loop
            for (pattern form) in pattern-forms
@@ -270,8 +264,8 @@
 
 (defmacro match-all (target pattern form)
   `(%match-all ,target
-               (eval-once (pattern-compile ',pattern))
-               (eval-once (lambda-compile ',form))))
+               (load-time-value (pattern-compile ',pattern))
+               (load-time-value (lambda-compile ',form))))
 
 (defmacro match-lambda (&rest pattern-forms)
   (with-gensyms (target)
