@@ -191,7 +191,7 @@
                                :pairs (cdr pairs)))
              '()))
         ((^)
-         (if (match-one target (first pattern-args) (lambda () t))
+         (if (match-one target (first pattern-args) (lambda () t) bindings)
              '()
              (list (make-state :bindings bindings
                                :pairs (cdr pairs)))))
@@ -223,9 +223,10 @@
 (defun state-end-p (state)
   (null (slot-value state 'pairs)))
 
-(defun match-one (target pattern func)
+(defun match-one (target pattern func &optional bindings)
   (loop
-     with states = (list (make-state :pairs `((,target . ,pattern))))
+     with states = (list (make-state :bindings bindings
+                                     :pairs `((,target . ,pattern))))
      for state = (pop states)
      while state
      when (state-end-p state)

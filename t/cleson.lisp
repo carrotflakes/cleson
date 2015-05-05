@@ -132,6 +132,10 @@
     '(0 1)
     :test 'equal)
 
+(is (match-all '(1 2 2 3 4 4 4 5)
+               (:join _ (:cons $x (:cons (* (^ =x) $y) _))) (list x y))
+    '((1 2) (2 3) (3 4) (4 5)))
+
 (is (match-all '(1 2 3 4 1 2 1)
       (:multiset-cons
        $x
