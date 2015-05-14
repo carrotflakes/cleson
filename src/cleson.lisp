@@ -103,7 +103,8 @@
          target args))
 
 (defun find-binding-pattern-variable (variable)
-  (cdr (assoc variable *variable-pattern-bindings*)))
+  (cdr (or (assoc variable *variable-pattern-bindings*)
+           (error "The variable pattern ~a is unbound" variable))))
 
 
 ;;; cardinal functions
