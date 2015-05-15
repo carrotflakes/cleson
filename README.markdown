@@ -29,18 +29,27 @@ A match macro tries to match the *target* value with the each *pattern* in order
 
 A match-all macro tries to match the *target* value with the *pattern*. The macro returns a list which contains evaluated values of the *form* in each result of the match.
 
+```common-lisp
+(match-all
+    '(1 4 6 4 2 6 8 9) ; target
+    (:join _ (:cons $x (:join _ (:cons (= x) _)))) ; pattern
+    x) ; form
+; => (4 6)
+```
+
 ### do-match-all
 
     (do-match-all target pattern form)
 
 This macro has the same effect as match-all macro, however, do-match-all macro does not return the result.
 
-```common-liso
-(match-all
-    '(1 4 6 4 2 6 8 9) ; target
-    (:join _ (:cons $x (:join _ (:cons (= x) _)))) ; pattern
-    x) ; form
-; => (4 6)
+```common-lisp
+(progv '(max) '(0)
+  (do-match-all '(1 7 3 4)
+    (:multiset-cons $x _)
+    (when (< max x) (setf max x)))
+  max)
+; => 7
 ```
 
 ### match-lambda
