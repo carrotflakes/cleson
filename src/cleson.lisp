@@ -9,6 +9,7 @@
            :define-pattern-function
            :match
            :match-all
+           :do-match-all
            :match-lambda
            :match-all-lambda)
   (:import-from :alexandria
@@ -251,6 +252,15 @@
      collect (eval-in func (state-bindings state))
      do (setf states (nconc (next-states state) states))))
 
+(defun %do-match-all (target pattern func)
+  (loop
+     with states = (list (make-state :pairs `((,target . ,pattern))))
+     for state = (pop states)
+     while state
+     when (state-end-p state)
+     do (eval-in func (state-bindings state))
+     do (setf states (nconc (next-states state) states))))
+
 
 ;;; cardinal macros
 (defmacro match (target &rest pattern-forms)
@@ -268,6 +278,11 @@
   `(%match-all ,target
                (load-time-value (pattern-compile ',pattern))
                (load-time-value (lambda-compile ',form))))
+
+(defmacro do-match-all (target pattern form)
+  `(%do-match-all ,target
+                  (load-time-value (pattern-compile ',pattern))
+                  (load-time-value (lambda-compile ',form))))
 
 (defmacro match-lambda (&rest pattern-forms)
   (with-gensyms (target)

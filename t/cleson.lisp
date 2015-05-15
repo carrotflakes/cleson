@@ -146,6 +146,14 @@
     '(1 1 2 1 1 2 1 1)
     :test 'equalp)
 
+(is (do-match-all '(1 2 3) (:multiset-cons $x _) x)
+    nil)
+
+(is (progv '(list) '(())
+      (do-match-all '(1 2 3) (:multiset-cons $x _) (push x list))
+      list)
+    '(3 2 1))
+
 (is (funcall (match-lambda ((= 'yo) 'yeah)) 'yo)
     'yeah)
 
